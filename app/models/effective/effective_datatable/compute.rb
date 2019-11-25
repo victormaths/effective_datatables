@@ -38,7 +38,7 @@ module Effective
 
         # Apply pagination
         col = col.kind_of?(Array) ? value_tool.paginate(col) : column_tool.paginate(col)
-
+        @computer_collection = col
         # Arrayize the searched, ordered, paginated results
         col = arrayize(col) unless col.kind_of?(Array)
 
@@ -62,7 +62,8 @@ module Effective
         collection.map do |obj|
           columns.map do |name, opts|
             if state[:visible][name] == false && (name != order_name)  # Sort by invisible array column
-              BLANK
+              obj.send(name)
+
             elsif opts[:compute]
               if array_collection?
                 dsl_tool.instance_exec(obj, obj[opts[:index]], &opts[:compute])
@@ -109,7 +110,8 @@ module Effective
             values = cols[opts[:index]] || []
 
             if state[:visible][name] == false
-              BLANK
+              format_column(aggregate_column(values, opts, aggregate), opts)
+
             elsif [:bulk_actions, :actions].include?(opts[:as])
               BLANK
             elsif values.length == 0

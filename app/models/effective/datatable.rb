@@ -33,7 +33,7 @@ module Effective
     include Effective::EffectiveDatatable::Resource
     include Effective::EffectiveDatatable::State
 
-    def initialize(view = nil, attributes = nil) 
+    def initialize(view = nil, attributes = nil)
       (attributes = view; view = nil) if view.kind_of?(Hash)
 
       @attributes = (attributes || {})
@@ -114,6 +114,7 @@ module Effective
       @json ||= (
         {
           data: (compute || []),
+          collection: @computer_collection,
           draw: (params[:draw] || 0),
           recordsTotal: (@total_records || 0),
           recordsFiltered: (@display_records || 0),
@@ -136,7 +137,12 @@ module Effective
     def sortable?
       !reorder? && attributes[:sortable] != false
     end
-
+    def data_controller
+      attributes[:data_controller]
+    end
+    def thead_class
+      attributes[:thead_class]
+    end
     # Whether the filters must be rendered as a <form> or we can keep the normal <div> behaviour
     def _filters_form_required?
       _form[:verb].present?

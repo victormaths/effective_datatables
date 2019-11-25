@@ -1,0 +1,12 @@
+---
+pt-BR:
+  effective_datatables:
+    apply: Aplicar
+    reset: Resetar
+    reorder: Reordenar
+    new: Novo
+    actions: Ações
+    bulk_actions: Ações em massa
+    applying: Aplicando...
+    boolean_true: 'Sim'
+    boolean_false: 'Não'

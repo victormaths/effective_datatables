@@ -15,9 +15,9 @@ initializeDataTables = (target) ->
         {
           extend: 'colvis',
           postfixButtons: [
-            { extend: 'colvisGroup', text: 'Show all', show: ':hidden', className: 'buttons-colvisGroup-first'},
-            { extend: 'colvisGroup', text: 'Show none', hide: ':visible' },
-            { extend: 'colvisGroup', text: 'Show default', hide: ':not(.colvis-default)', show: '.colvis-default' }
+            { extend: 'colvisGroup', text: 'Mostrar todos', show: ':hidden', className: 'buttons-colvisGroup-first'},
+            { extend: 'colvisGroup', text: 'Ocultar todos', hide: ':visible' },
+            { extend: 'colvisGroup', text: 'Padrão', hide: ':not(.colvis-default)', show: '.colvis-default' }
           ]
         },
         {
@@ -44,6 +44,13 @@ initializeDataTables = (target) ->
         },
       ]
       columns: datatable.data('columns')
+      columnDefs:[{targets: '_all', createdCell: (td, cellData, rowData, row, col) ->
+        if datatable.data('columns')[col].data_hash != "null" &&  datatable.data('columns')[col].data_hash.length >0
+          jQuery.each(JSON.parse(datatable.data('columns')[col].data_hash), (name, value) ->
+            $(td).attr("data-"+name,value)
+          )
+      }
+      ]
       deferLoading: [datatable.data('display-records'), datatable.data('total-records')]
       deferRender: true
       displayStart: datatable.data('display-start')
@@ -53,6 +60,16 @@ initializeDataTables = (target) ->
       order: datatable.data('display-order')
       processing: true
       responsive: true
+      createdRow: (row, data, dataIndex) ->
+          a = $(row).find('td:eq(0)').html()
+          if datatable.data('data-controller')
+            $(row).attr('data-' + datatable.data('data-controller') + "-id", this.api().row(row).data()[0])
+            $(row).attr('data-controller', datatable.data('data-controller'))
+
+          if( datatable.data('data-action'))
+            $(row).attr('data-action', datatable.data('data-action'))
+
+
       serverParams: (params) ->
         api = this.api()
         api.columns().flatten().each (index) => params['columns'][index]['visible'] = api.column(index).visible()
@@ -77,7 +94,7 @@ initializeDataTables = (target) ->
               filter_name = name.replace('filters[', '').substring(0, name.length-9)
 
               params['filter'][filter_name] = $form.find("input[name='#{name}']:checked").val()
-              
+
             else if $input.attr('id')
               filter_name = $input.attr('id').replace('filters_', '')
               params['filter'][filter_name] = $input.val()

@@ -11,6 +11,13 @@ table.dataTable th {
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
 }
+
+table.dataTable th .select-wrapper input.select-dropdown{
+  margin:0 !important;
+}
+table.dataTable th .select-wrapper{
+  margin:0 !important;
+}
 table.dataTable td.dataTables_empty,
 table.dataTable th.dataTables_empty {
   text-align: center;

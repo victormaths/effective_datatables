@@ -9,6 +9,7 @@ module EffectiveDatatablesPrivateHelper
       {
         className: opts[:col_class],
         name: name,
+        data_hash: opts[:data_hash].to_json.html_safe,
         responsivePriority: opts[:responsive],
         search: datatable.state[:search][name],
         searchHtml: datatable_search_tag(datatable, name, opts),
@@ -78,7 +79,9 @@ module EffectiveDatatablesPrivateHelper
     return if opts[:search] == false
 
     # Build the search
-    @_effective_datatables_form_builder || effective_form_with(scope: :datatable_search, url: '#') { |f| @_effective_datatables_form_builder = f }
+    @_effective_datatables_form_builder || form_with(scope: :datatable_search, url: '#') {
+      |f| @_effective_datatables_form_builder = f
+    }
     form = @_effective_datatables_form_builder
 
     collection = opts[:search].delete(:collection)
@@ -94,22 +97,34 @@ module EffectiveDatatablesPrivateHelper
 
     case options.delete(:as)
     when :string, :text, :number
-      form.text_field name, options
+      options[:class] = "form-control"
+      options[:placeholder] = "Pesquisar..."
+      content_tag(:div) do
+        form.text_field name, options
+      end
     when :date, :datetime
-      form.date_field name, options.reverse_merge(
-        date_linked: false, prepend: false, input_js: { useStrict: true, keepInvalid: true }
-      )
+      content_tag(:div) do
+        form.date_field name, options.reverse_merge(
+          date_linked: false, prepend: false, input_js: { useStrict: true, keepInvalid: true }
+        )
+      end
     when :time
-      form.time_field name, options.reverse_merge(
-        date_linked: false, prepend: false, input_js: { useStrict: false, keepInvalid: true }
-      )
+      content_tag(:div) do
+        form.time_field name, options.reverse_merge(
+          date_linked: false, prepend: false, input_js: { useStrict: false, keepInvalid: true }
+        )
+      end
     when :select, :boolean
       options[:input_js] = (options[:input_js] || {}).reverse_merge(placeholder: '')
-
-      form.select name, collection, options
+      options[:class] = "mdb-select md-form md-outline colorful-select dropdown-primary"
+      collection.unshift(["Todos", ""])
+      content_tag(:div) do
+        form.select name, collection,{}, options
+      end
     when :bulk_actions
       options[:data]['role'] = 'bulk-actions'
-      form.check_box name, options.merge(label: '&nbsp;')
+
+        form.check_box name, options.merge(label: '&nbsp;')
     end
   end
 

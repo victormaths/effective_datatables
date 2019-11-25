@@ -56,7 +56,8 @@ module Effective
 
             row[index] = (
               if state[:visible][name] == false
-                NONVISIBLE
+                value
+
               elsif opts[:as] == :actions
                 rendered[name][row_index]
               elsif opts[:format] && rendered.key?(name)

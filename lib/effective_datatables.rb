@@ -4,7 +4,7 @@ require 'effective_datatables/engine'
 require 'effective_datatables/version'
 
 module EffectiveDatatables
-  AVAILABLE_LOCALES = %w(en es nl)
+  AVAILABLE_LOCALES = %w(en es nl pt-BR)
 
   mattr_accessor :authorization_method
 
@@ -56,7 +56,7 @@ module EffectiveDatatables
     @_languages ||= {}
 
     locale = :en unless AVAILABLE_LOCALES.include?(locale.to_s)
-
+    p locale
     @_languages[locale] ||= begin
       path = Gem::Specification.find_by_name('effective_datatables').gem_dir + "/app/assets/javascripts/dataTables/locales/#{locale}.lang"
       JSON.parse(File.read(path)).to_json

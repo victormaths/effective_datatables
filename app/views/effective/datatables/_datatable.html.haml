@@ -1,5 +1,5 @@
 %table{effective_datatable_params}
-  %thead
+  %thead{"class": "#{datatable.thead_class}"}
     - if datatable.columns.any? { |_, opts| opts[:th].present? } == false
       %tr
         - datatable.columns.each do |name, opts|
@@ -22,7 +22,7 @@
 
   - if datatable.to_json[:aggregates].present?
     %tfoot
-      - datatable.to_json[:aggregates].each do |row|
-        %tr
+      - datatable.to_json[:aggregates].each_with_index do |row, i|
+        %tr{"data-controller": "#{datatable.data_controller}","data-#{datatable.data_controller}-id": datatable.to_json[:collection][i].id}
           - row.each do |col|
             %td= col.to_s.html_safe

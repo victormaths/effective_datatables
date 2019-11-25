@@ -20,7 +20,7 @@ module EffectiveDatatablesHelper
     charts = charts && datatable._charts.present?
     filters = filters && (datatable._scopes.present? || datatable._filters.present?)
 
-    html_class = ['effective-datatable', datatable.html_class, ('hide-sort' unless sort), ('hide-search' unless search), ('hide-buttons' unless buttons)].compact.join(' ')
+    html_class = ['btn-table', 'effective-datatable', datatable.html_class, ('hide-sort' unless sort), ('hide-search' unless search), ('hide-buttons' unless buttons)].compact.join(' ')
 
     if datatable.reorder? && !buttons
       buttons = true; input_js[:buttons] = false
@@ -42,6 +42,8 @@ module EffectiveDatatablesHelper
       data: {
         'attributes' => EffectiveDatatables.encrypt(datatable.attributes),
         'authenticity-token' => form_authenticity_token,
+        'data-controller' => datatable.attributes[:data_controller],
+        'data-action' => datatable.attributes[:data_action],
         'bulk-actions' => datatable_bulk_actions(datatable),
         'columns' => datatable_columns(datatable),
         'display-length' => datatable.display_length,

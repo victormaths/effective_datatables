@@ -28,7 +28,7 @@ module Effective
         # Anything done in the block, is purely a format on the after sorted/ordered value
         # the original object == the computed value, which is yielded to the format block
         # You can't do compute with .col
-        def col(name, action: nil, as: nil, col_class: nil, label: nil, partial: nil, partial_as: nil, responsive: 10000, search: {}, sort: true, sql_column: nil, th: nil, th_append: nil, visible: true, &format)
+        def col(name, action: nil, as: nil, col_class: nil, data: nil, label: nil, partial: nil, partial_as: nil, responsive: 10000, search: {}, sort: true, sql_column: nil, th: nil, th_append: nil, visible: true, &format)
           raise 'You cannot use partial: ... with the block syntax' if partial && block_given?
 
           name = name.to_sym unless name.to_s.include?('.')
@@ -40,6 +40,7 @@ module Effective
             col_class: col_class,
             format: (format if block_given?),
             index: nil,
+            data_hash: data,
             label: (label.nil? ? name.to_s.split('.').last.titleize : label),
             name: name,
             partial: partial,
