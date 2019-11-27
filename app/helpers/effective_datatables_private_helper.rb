@@ -117,7 +117,7 @@ module EffectiveDatatablesPrivateHelper
     when :select, :boolean
       options[:input_js] = (options[:input_js] || {}).reverse_merge(placeholder: '')
       options[:class] = "mdb-select md-form md-outline colorful-select dropdown-primary"
-      collection.unshift(["Todos", ""])
+      collection.unshift(["Todos", ""]) if collection
       content_tag(:div) do
         form.select name, collection,{}, options
       end
