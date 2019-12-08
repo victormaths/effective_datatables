@@ -59,7 +59,6 @@ initializeDataTables = (target) ->
       lengthMenu: [[5, 10, 25, 50, 100, 250, 500, 9999999], ['5', '10', '25', '50', '100', '250', '500', 'All']]
       order: datatable.data('display-order')
       processing: true
-      responsive: true
       createdRow: (row, data, dataIndex) ->
           a = $(row).find('td:eq(0)').html()
           if datatable.data('data-controller')
